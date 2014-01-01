@@ -1,0 +1,113 @@
+#include<stdio.h>
+#include<conio.h>
+#include<math.h>
+void arabaEkle();
+void hesapGoruntule();
+struct otopark
+{
+	char plaka[10];
+	int girisSaat;
+	int girisDakika;
+	int cıkısSaat;
+	int cıkısDakika;
+};
+void main()
+{
+	char cevap,devamMı='e';
+	do
+	{
+	printf("\n1==>Arac Ekle\n");
+	printf("2==>Ucret Hesapla\n");
+	printf("3==>Cikis\n");
+	printf("Seceneginiz:");
+	cevap=getche();
+	printf("\n");
+		if(cevap=='1')
+			arabaEkle();
+		else if(cevap=='2')
+			hesapGoruntule();
+		else if(cevap=='3')
+		{
+			printf("İyi gunler...");
+			break;
+		}
+		printf("Menuye donulsun mu:(e/h)?:");
+		devamMı=getche();
+	}
+	while(devamMı=='E' || devamMı=='e');
+}
+void arabaEkle()
+{
+	struct otopark arac;
+	FILE*dd;
+	dd=fopen("park.txt","a");
+	if(dd==NULL)
+	printf("Dosya acılamadi...");
+	else
+	{
+		printf("Arac plakasini giriniz:");
+		fflush(stdin);
+		gets(arac.plaka);
+		printf("Aracin Giris Saati\n");
+		printf("\tSaat:");
+		scanf("%d",&arac.girisSaat);
+		if(arac.girisSaat>=24)
+		{
+			printf("Saati yanlis girdiniz...\n");
+			arabaEkle();
+		}
+		printf("\tDakika:");
+		scanf("%d",&arac.girisDakika);
+		if(arac.girisDakika>=60)
+		{
+			printf("Dakikayi yanlis girdiniz...\n");
+			arabaEkle();
+		}
+		printf("Aracin Cikis Saati\n");
+		printf("\tSaat:");
+		scanf("%d",&arac.cıkısSaat);
+		if(arac.cıkısSaat>=24)
+		{
+			printf("Saati yanlis girdiniz...\n");
+			arabaEkle();
+		}
+		printf("\tDakika:");
+		scanf("%d",&arac.cıkısDakika);
+		if(arac.cıkısDakika>=60)
+		{
+			printf("Dakikayi yanlis girdiniz...\n");
+			arabaEkle();
+		}
+		fprintf(dd,"%s\t%d.%d\t%d.%d\t\n",arac.plaka,arac.girisSaat,arac.girisDakika,arac.cıkısSaat,arac.cıkısDakika);
+		fclose(dd);
+	}
+}
+void hesapGoruntule()
+{
+	double toplamDakika=0;
+	int	ucret=0;
+	struct otopark arac;
+	FILE*dd;
+	dd=fopen("park.txt","r");
+	if(dd==NULL)
+		printf("Dosya bulanamadi...");
+	else
+	{
+		printf("Arac Plaka\tGiris Saati\tCikis Saati\tUcret\n");
+		while(!feof(dd))
+		{
+			fscanf(dd,"%s\t%d.%d\t%d.%d\t\n",arac.plaka,&arac.girisSaat,&arac.girisDakika,&arac.cıkısSaat,&arac.cıkısDakika);
+			toplamDakika=(arac.cıkısSaat*60+arac.cıkısDakika)-(arac.girisSaat*60+arac.girisSaat);
+			if(fabs(toplamDakika)<=60)
+				ucret=2;
+			else if(fabs(toplamDakika)>60 && fabs(toplamDakika)<=240)
+				ucret=4;
+			else if(fabs(toplamDakika)>240 && fabs(toplamDakika)<=480)
+				ucret=6;
+			else
+				ucret=8;
+			printf("%s\t\t%d.%d\t\t%d.%d\t\t%dTL\n",arac.plaka,arac.girisSaat,arac.girisDakika,arac.cıkısSaat,arac.cıkısDakika,ucret);
+		}
+		fclose(dd);
+	}
+}
