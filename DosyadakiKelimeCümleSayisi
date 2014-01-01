@@ -1,0 +1,25 @@
+//DOSYAYA BİLGİLER ONCEDEN GİRİLMELİ
+#include<stdio.h>
+#include<conio.h>
+void main()
+{
+	char cumle[100];
+	int i=0,cumleSay=0,kelimeSay=0;
+	FILE*dd;
+	dd=fopen("deneme.txt","r");
+	if(dd==NULL)
+		printf("Dosya bulunamadi...");
+	else
+	{
+		while(!feof(dd))
+		{
+			fscanf(dd,"%c",&cumle[i]);			
+			if(cumle[i]=='.')
+				cumleSay++;
+			if(cumle[i]==' ')
+				kelimeSay++;
+			i++;
+		}
+		printf("Cumle Sayisi:%d\nKelime Sayisi:%d\nKarakter Sayisi:%d",cumleSay,kelimeSay+1,i);
+	}
+}
